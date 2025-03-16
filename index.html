@@ -17,20 +17,31 @@
     <div id="posts"></div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("https://script.google.com/macros/s/AKfycby3AtgmX1gCDd2KUeYT8TkUBkVKoh_VH0q3oflLp6Bp3tse0SOETZgGV9wgiP8fT4FY/exec?action=getDonationHistory", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-                mode: "cors" // CORS を許可
-            })
-            .then(response => {
+        const BACKEND_URL = "https://script.google.com/macros/s/AKfycby3AtgmX1gCDd2KUeYT8TkUBkVKoh_VH0q3oflLp6Bp3tse0SOETZgGV9wgiP8fT4FY/exec";
+
+        document.addEventListener("DOMContentLoaded", async function() {
+            try {
+                const params = new URLSearchParams();
+                params.append("action", "getDonationHistory");
+
+                const response = await fetch(BACKEND_URL, {
+                    method: "POST",  // GETではなくPOSTでデータを取得
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Accept": "application/json"
+                    },
+                    body: params.toString()
+                });
+
                 if (!response.ok) {
                     throw new Error(`HTTPエラー: ${response.status}`);
                 }
-                return response.json();
-            })
-            .then(data => updateBlogPosts(data))
-            .catch(error => console.error("寄付データの取得に失敗しました", error));
+
+                const data = await response.json();
+                updateBlogPosts(data);
+            } catch (error) {
+                console.error("寄付データの取得に失敗しました", error);
+            }
         });
 
         function updateBlogPosts(posts) {
