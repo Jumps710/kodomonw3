@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最新の寄付情報</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .post { border-bottom: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
+        .post img { max-width: 100%; height: auto; }
+        .post h2 { font-size: 18px; margin: 0; }
+    </style>
+</head>
+<body>
+    <h1>最新の寄付情報</h1>
+    <div id="posts"></div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("https://script.google.com/macros/s/AKfycbxXXXXX/exec?action=getDonationHistory") // GAS API
+                .then(response => response.json())
+                .then(data => updateBlogPosts(data))
+                .catch(error => console.error("寄付データの取得に失敗しました", error));
+        });
+
+        function updateBlogPosts(posts) {
+            const container = document.getElementById("posts");
+            container.innerHTML = ""; // 既存の投稿をクリア
+
+            posts.forEach(post => {
+                const postHtml = `
+                    <div class="post">
+                        <h2>${post.itemName}をご寄付いただきました！（${post.donor}）</h2>
+                        <p><strong>日付：</strong> ${post.date}</p>
+                        <p>${post.message}</p>
+                        <p><a href="https://www.instagram.com/" target="_blank">Instagramで見る</a></p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" alt="${post.itemName}">` : ""}
+                    </div>
+                `;
+                container.insertAdjacentHTML("beforeend", postHtml);
+            });
+        }
+    </script>
+</body>
+</html>
