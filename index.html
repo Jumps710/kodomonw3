@@ -118,12 +118,13 @@ const list = donations.map(donation => `
             <div class="donation-title">${donation.donor}よりご支援をいただきました</div>
             <div class="donation-message">${donation.message}</div>
             <div class="donation-reporter">
-                報告者：<a href="${donation.siteUrl}" target="_blank">${donation.siteName}</a>
+                報告者：<a href="${donation.siteURL}" target="_blank">${donation.siteName}</a>
             </div>
         </div>
     </div>
 `).join('');
 document.getElementById("donation-list").innerHTML = list;
+
 
             } catch (error) {
                 console.error("データ表示エラー:", error);
