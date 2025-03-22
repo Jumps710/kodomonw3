@@ -4,31 +4,86 @@
     <meta charset="UTF-8">
     <title>最新寄付情報</title>
     <style>
+        @import url(https://fonts.jimstatic.com/css?family=Roboto:300,400,700);
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             line-height: 1.6;
             margin: 20px;
+            background-color: #f7f8f8;
+            color: #112631;
         }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 32px;
+            color: #74A72D;
+            font-weight: bold;
+        }
+
         .donation-item {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
         }
+
+        .donation-item:hover {
+            transform: scale(1.02);
+        }
+
         .donation-item img {
             max-width: 150px;
             max-height: 150px;
             margin-right: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .donation-text {
             flex: 1;
+            padding: 10px;
         }
-        h1 {
-            margin-bottom: 20px;
+
+        .donation-text h3 {
+            margin: 0 0 8px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .donation-text p {
+            margin: 4px 0;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .donation-text p strong {
+            color: #112631;
+        }
+
+        @media (max-width: 768px) {
+            .donation-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .donation-item img {
+                margin: 0 0 10px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .donation-text h3, .donation-text p {
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -53,16 +108,15 @@
                     return `${year}年${month}月${day}日`;
                 };
 
-                // 最新の投稿を上に表示
                 const list = donations.map(donation => `
                     <div class="donation-item">
                         ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
                         <div class="donation-text">
                             <h3>${donation.donor} 様</h3>
-                            <p>品物: ${donation.itemName}</p>
-                            <p>メッセージ: ${donation.message}</p>
-                            <p>寄付日時: ${formatDate(donation.timestamp)}</p>
-                            <p>ニックネーム: ${donation.nickname}</p>
+                            <p><strong>品物:</strong> ${donation.itemName}</p>
+                            <p><strong>メッセージ:</strong> ${donation.message}</p>
+                            <p><strong>寄付日時:</strong> ${formatDate(donation.timestamp)}</p>
+                            <p><strong>ニックネーム:</strong> ${donation.nickname}</p>
                         </div>
                     </div>
                 `).join('');
@@ -73,8 +127,7 @@
             }
         }
 
-        // ページがロードされたときにデータを読み込む
-        window.onload = loadDonations;
+        loadDonations();
     </script>
 </body>
 </html>
