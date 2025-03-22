@@ -1,29 +1,60 @@
-async function loadDonations() {
-    try {
-        const response = await fetch("https://script.google.com/macros/s/AKfycby3AtgmX1gCDd2KUeYT8TkUBkVKoh_VH0q3oflLp6Bp3tse0SOETZgGV9wgiP8fT4FY/exec?action=getDonations");
-        if (!response.ok) throw new Error("データ取得エラー");
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>最新寄付情報</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .donation-item {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>最新寄付情報</h1>
+    <div id="donation-list">読み込み中...</div>
 
-        const donations = await response.json();
-        console.log("レスポンスデータ:", donations);
+    <script>
+        async function loadDonations() {
+            try {
+                const response = await fetch("https://script.google.com/macros/s/AKfycby3AtgmX1gCDd2KUeYT8TkUBkVKoh_VH0q3oflLp6Bp3tse0SOETZgGV9wgiP8fT4FY/exec?action=getDonations");
+                if (!response.ok) throw new Error("データ取得エラー");
 
-        if (!Array.isArray(donations)) throw new Error("データ形式エラー");
+                const donations = await response.json();
+                console.log("レスポンスデータ:", donations);
 
-        // 最新の投稿を上に表示
-        const list = donations.map(donation => `
-            <div class="donation-item">
-                <h3>${donation.donor} 様</h3>
-                <p>品物: ${donation.itemName}</p>
-                <p>メッセージ: ${donation.message}</p>
-                <p>寄付日時: ${donation.timestamp}</p>
-                <p>ニックネーム: ${donation.nickname}</p>
-                ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
-            </div>
-        `).join('');
-        document.getElementById("donation-list").innerHTML = list;
-    } catch (error) {
-        console.error("データ表示エラー:", error);
-        document.getElementById("donation-list").innerHTML = "データを取得できませんでした。";
-    }
-}
+                if (!Array.isArray(donations)) throw new Error("データ形式エラー");
 
-loadDonations();
+                const list = donations.map(donation => `
+                    <div class="donation-item">
+                        <h3>${donation.donor} 様</h3>
+                        <p>品物: ${donation.itemName}</p>
+                        <p>メッセージ: ${donation.message}</p>
+                        <p>寄付日時: ${donation.timestamp}</p>
+                        <p>ニックネーム: ${donation.nickname}</p>
+                        ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
+                    </div>
+                `).join('');
+                document.getElementById("donation-list").innerHTML = list;
+
+            } catch (error) {
+                console.error("データ表示エラー:", error);
+                document.getElementById("donation-list").innerHTML = "データを取得できませんでした。";
+            }
+        }
+        loadDonations();
+    </script>
+</body>
+</html>
