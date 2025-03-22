@@ -107,21 +107,24 @@
                     return `${year}年${month}月${day}日`;
                 };
 
-                const list = donations.map(donation => `
-                    <div class="donation-item">
-                        ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像" class="donation-image">` : ''}
-                        <div class="donation-text">
-                            <div class="donation-header">
-                                ご寄付・御礼
-                                <span class="donation-date">${formatDate(donation.timestamp)}</span>
-                            </div>
-                            <div class="donation-title">${donation.donor}よりご支援をいただきました</div>
-                            <div class="donation-message">${donation.message}</div>
-                            <div class="donation-reporter">報告者：${donation.siteName}</div>
-                        </div>
-                    </div>
-                `).join('');
-                document.getElementById("donation-list").innerHTML = list;
+const list = donations.map(donation => `
+    <div class="donation-item">
+        ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像" class="donation-image">` : ''}
+        <div class="donation-text">
+            <div class="donation-header">
+                ご寄付・御礼
+                <span class="donation-date">${formatDate(donation.timestamp)}</span>
+            </div>
+            <div class="donation-title">${donation.donor}よりご支援をいただきました</div>
+            <div class="donation-message">${donation.message}</div>
+            <div class="donation-reporter">
+                報告者：<a href="${donation.siteUrl}" target="_blank">${donation.siteName}</a>
+            </div>
+        </div>
+    </div>
+`).join('');
+document.getElementById("donation-list").innerHTML = list;
+
             } catch (error) {
                 console.error("データ表示エラー:", error);
                 document.getElementById("donation-list").innerHTML = "データを取得できませんでした。";
