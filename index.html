@@ -56,7 +56,7 @@
                 // 最新の投稿を上に表示
                 const list = donations.map(donation => `
                     <div class="donation-item">
-                        ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
+                        ${donation.imageUrl ? `<img src="${donation.imageUrl.replace(/&amp;/g, '&')}" alt="寄付画像">` : ''}
                         <div class="donation-text">
                             <h3>${donation.donor} 様</h3>
                             <p>品物: ${donation.itemName}</p>
