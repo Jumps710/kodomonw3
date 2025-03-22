@@ -12,21 +12,28 @@
             margin: 20px;
             background-color: #f7f8f8;
             color: #112631;
+            text-align: center;
         }
 
         h1 {
             margin-bottom: 20px;
-            text-align: center;
             font-size: 32px;
             color: #74A72D;
             font-weight: bold;
         }
 
+        #donation-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
         .donation-item {
             display: flex;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 20px;
             border: 1px solid #ddd;
             border-radius: 10px;
             background-color: #ffffff;
@@ -38,50 +45,55 @@
             transform: scale(1.02);
         }
 
-        .donation-item img {
-            max-width: 150px;
-            max-height: 150px;
-            margin-right: 20px;
-            border-radius: 8px;
-            object-fit: cover;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .donation-header {
+            font-size: 14px;
+            color: #74A72D;
+            margin-bottom: 8px;
+            text-align: left;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
 
-        .donation-text {
-            flex: 1;
-            padding: 10px;
+        .donation-date {
+            color: #333;
+            font-size: 14px;
         }
 
-        .donation-text h3 {
-            margin: 0 0 8px;
+        .donation-title {
             font-size: 24px;
             font-weight: bold;
-            color: #333;
+            margin: 8px 0;
+            text-align: center;
         }
 
-        .donation-text p {
-            margin: 4px 0;
-            font-size: 18px;
+        .donation-message {
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 1.4;
+            text-align: justify;
+        }
+
+        .donation-reporter {
+            font-size: 14px;
             color: #555;
-        }
-
-        .donation-text p strong {
-            color: #112631;
+            margin-top: 8px;
+            text-align: right;
+            width: 100%;
         }
 
         @media (max-width: 768px) {
+            #donation-list {
+                width: 100%;
+                padding: 0 10px;
+            }
+
             .donation-item {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
             }
 
-            .donation-item img {
-                margin: 0 0 10px;
-                width: 100%;
-                max-width: 100%;
-            }
-
-            .donation-text h3, .donation-text p {
+            .donation-title, .donation-message, .donation-reporter {
                 text-align: center;
             }
         }
@@ -110,14 +122,13 @@
 
                 const list = donations.map(donation => `
                     <div class="donation-item">
-                        ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
-                        <div class="donation-text">
-                            <h3>${donation.donor} 様</h3>
-                            <p><strong>品物:</strong> ${donation.itemName}</p>
-                            <p><strong>メッセージ:</strong> ${donation.message}</p>
-                            <p><strong>寄付日時:</strong> ${formatDate(donation.timestamp)}</p>
-                            <p><strong>ニックネーム:</strong> ${donation.nickname}</p>
+                        <div class="donation-header">
+                            <span>ご寄付・御礼</span>
+                            <span class="donation-date">${formatDate(donation.timestamp)}</span>
                         </div>
+                        <div class="donation-title">${donation.donor}よりご支援をいただきました</div>
+                        <div class="donation-message">${donation.message}</div>
+                        <div class="donation-reporter">報告者：${donation.nickname}</div>
                     </div>
                 `).join('');
                 document.getElementById("donation-list").innerHTML = list;
