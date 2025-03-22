@@ -10,15 +10,25 @@
             margin: 20px;
         }
         .donation-item {
+            display: flex;
+            align-items: center;
             margin-bottom: 20px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        img {
-            max-width: 100%;
-            height: auto;
+        .donation-item img {
+            max-width: 150px;
+            max-height: 150px;
+            margin-right: 20px;
+            border-radius: 5px;
+        }
+        .donation-text {
+            flex: 1;
+        }
+        h1 {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -31,29 +41,30 @@
             try {
                 const response = await fetch("https://script.google.com/macros/s/AKfycby3AtgmX1gCDd2KUeYT8TkUBkVKoh_VH0q3oflLp6Bp3tse0SOETZgGV9wgiP8fT4FY/exec?action=getDonations");
                 if (!response.ok) throw new Error("データ取得エラー");
-
                 const donations = await response.json();
                 console.log("レスポンスデータ:", donations);
-
                 if (!Array.isArray(donations)) throw new Error("データ形式エラー");
 
+                // 最新の投稿を上に表示
                 const list = donations.map(donation => `
                     <div class="donation-item">
-                        <h3>${donation.donor} 様</h3>
-                        <p>品物: ${donation.itemName}</p>
-                        <p>メッセージ: ${donation.message}</p>
-                        <p>寄付日時: ${donation.timestamp}</p>
-                        <p>ニックネーム: ${donation.nickname}</p>
                         ${donation.imageUrl ? `<img src="${donation.imageUrl}" alt="寄付画像">` : ''}
+                        <div class="donation-text">
+                            <h3>${donation.donor} 様</h3>
+                            <p>品物: ${donation.itemName}</p>
+                            <p>メッセージ: ${donation.message}</p>
+                            <p>寄付日時: ${new Date(donation.timestamp).toLocaleString()}</p>
+                            <p>ニックネーム: ${donation.nickname}</p>
+                        </div>
                     </div>
                 `).join('');
                 document.getElementById("donation-list").innerHTML = list;
-
             } catch (error) {
                 console.error("データ表示エラー:", error);
                 document.getElementById("donation-list").innerHTML = "データを取得できませんでした。";
             }
         }
+
         loadDonations();
     </script>
 </body>
