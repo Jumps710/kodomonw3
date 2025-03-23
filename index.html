@@ -132,7 +132,7 @@
                 // それ以前のデータをテキスト形式で表示
                 const pastDonations = donations.slice(10).map(donation => `
                     ◆${formatDate(donation.timestamp)} ${donation.donor} 様より ${donation.itemName} のご支援をいただきました
-                    ${donation.instagramUrl ? ` (<a href="${donation.instagramUrl}" target="_blank" style="color: #74A72D; font-weight: bold;">Instagram投稿</a>)` : ''}
+                    ${donation.instagramUrl ? ` (<a href="${donation.instagramUrl}" target="_blank" style="color: #74A72D;">Instagram投稿</a>)` : ''}
                 `).join('<br>');
 
                 // 最新10件表示エリア
